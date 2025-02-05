@@ -1,0 +1,15 @@
+{
+  "hash": "f543d4e7d06def3768aaba21eb991bff",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Yifei Chen\"\nauthor: \"Yifei Chen\"\ndate: \"2025-02-05\"\ncategories: [analysis]\nimage: YC_portrait.jpg\n---\n\n\n\n![](YC_portrait.jpg){width=\"50%\"}\n\n## Quarto\n\nQuarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n1+1\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 2\n```\n\n\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
