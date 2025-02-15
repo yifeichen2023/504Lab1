@@ -12,6 +12,48 @@ image: YC_portrait.jpg
 
 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
 
-```{r}
+```{python}
 1+1
+```
+```{r}
+# Load the pwr package
+library(pwr)
+
+# Define parameters
+R_squared <- 0.775  # Example R^2 value
+alpha <- 0.05      # Significance level
+power <- 0.80      # Desired power
+u <- 1             # Number of predictors (only one predictor)
+
+# Convert R^2 to Cohen's f^2
+f2 <- R_squared / (1 - R_squared)
+
+# Perform power analysis
+result <- pwr.f2.test(u = u, f2 = f2, sig.level = alpha, power = power)
+
+# Extract the required sample size
+# The function returns v (degrees of freedom for the denominator), so calculate sample size as:
+n <- result$v + u + 1
+
+# Print the result
+cat("Required sample size:", n, "\n")
+```
+
+
+```{r}
+# Define parameters
+n <- 26 # Sample size (number of observations)
+u <- 1                # Number of predictors (only one predictor in your case)
+alpha <- 0.05         # Significance level
+
+# Convert R-squared to Cohen's f^2
+r_squared <- 0.775
+f2 <- r_squared / (1 - r_squared)
+
+# Perform power analysis
+result <- pwr.f2.test(u = u, f2 = f2, sig.level = alpha, power = NULL, v = n - u - 1)
+
+# Extract the power
+power <- result$power
+cat("Power of the analysis:", power, "\n")
 ```
