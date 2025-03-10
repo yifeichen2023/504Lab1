@@ -1,0 +1,215 @@
+---
+    title: "Lab 5 - Poisson - Questions"
+    author:
+      - name: Yifei Chen
+    date: last-modified
+    format:
+      html:
+        self-contained: true
+        anchor-sections: true
+        code-tools: true
+        code-fold: true
+        fig-width: 8
+        fig-height: 4
+        code-block-bg: "#f1f3f5"
+        code-block-border-left: "#31BAE9"
+        mainfont: Source Sans Pro
+        theme: journal
+        toc: true
+        toc-depth: 3
+        toc-location: left
+        captions: true
+        cap-location: margin
+        table-captions: true
+        tbl-cap-location: margin
+        reference-location: margin
+      pdf:
+        pdf-engine: lualatex
+        toc: false
+        number-sections: true
+        number-depth: 2
+        top-level-division: section
+        reference-location: document
+        listings: false
+        header-includes:
+          \usepackage{marginnote, here, relsize, needspace, setspace}
+          \def\it{\emph}
+
+    comments:
+      hypothesis: false
+
+    execute:
+      warning: false
+      message: false
+---
+
+1.  To complete this lab:
+
+-   Load packages
+
+```{r}
+library(MASS)
+library(tidyverse)
+library(emmeans)
+library(ggeffects)
+library(easystats)
+library(performance)
+library(knitr)
+```
+
+- Download the dataset:
+
+```{r}
+
+library(tidyverse)
+
+data <- read_delim("https://raw.githubusercontent.com/jgeller112/psy504-advanced-stats/main/slides/Poisson/data/2010.csv")
+
+```
+
+2. Conduct the analysis described in the preregistration document
+
+a.  The number of hours per week that a person spends on the Internet ("WWWHR") will\
+    be predicted by their vocabulary ("WORDSUM"), age ("AGE"), sex ("SEX"), religiosity\
+    ("RELITEN"), political orientation ("POLVIEWS"), and how often they work from home\
+    ("WRKHOME").
+
+
+- Let's use the `naniar` package's function `replace_with_na`to clean the data. 
+
+```{r}
+library(naniar)
+
+data_pos <- data %>%
+  dplyr::select(wwwhr, wordsum, age, sex, reliten, polviews, wrkhome) %>%
+replace_with_na(.,
+             replace = list(wwwhr = c(-1, 998, 999),
+                          wordsum = c(-1, 99),
+                          reliten = c(0, 8, 9), 
+             polviews = c(0, 8, 9), 
+             wrkhome = c(0,8,9), 
+             age=c(0, 98, 99)))
+```
+Q: Can you explain what might be going on in the above code?
+
+A: It is replacing certain values within the specified column with NA to indicate missing/invalid data. It also first filter out columns that we don't need for further analysis.
+
+
+
+Q: The next step in data cleaning would be to ensure that the data in your code are aligned with the description/ usage context of the variables
+
+- Recode sex and reliten as necessary
+
+```{r}
+data_pos <- data_pos %>%
+  mutate(sex = factor(sex, levels = c(-1, 1)),
+         reliten = factor(reliten, levels = c(1, 2, 3, 4)))
+```
+## Missingness
+```{r}
+library(skimr)
+skimr::skim(data_pos)
+
+```
+
+
+## Fit a Poisson model to the data.
+
+```{r}
+
+model <- glm(wwwhr ~ wordsum + age + sex + reliten + polviews + wrkhome, 
+                     data = data_pos, family = poisson(link = "log"))
+
+summary(model)
+
+```
+## Carry out model checking
+
+Hint: performance package has the function you're looking for
+
+```{r}
+performance::check_overdispersion(model)
+```
+
+## Find any outliers
+
+```{r}
+outliers <- performance::check_outliers(model)
+data_pos_clean <- data_pos[-outliers, ]
+```
+
+## Refit the model after excludint outliers
+
+```{r}
+model2 <- glm(wwwhr ~ wordsum + age + sex + reliten + polviews + wrkhome, 
+                           data = data_pos_clean, family = poisson(link = "log"))
+
+summary(model2)
+```
+
+```{r}
+model_parameters(model2) %>%
+  print_html()
+```
+
+### Check for Overdispersion 
+
+Hint: performance package has the function you're looking for
+```{r}
+performance::check_overdispersion(model2)
+```
+
+What do you notice?
+And what's a good next step forward?
+Can there be another model class that can fit the data? If so, fit this model to the data. 
+
+```{r}
+# it is still not a good fit after excluding the outliers, next step -> negative binomial
+nb_model <- glm.nb(wwwhr ~ wordsum + age + sex + reliten + polviews + wrkhome, 
+                   data = data_pos_clean)
+
+summary(nb_model)
+```
+
+## Which one is better- your earlier model, or later model?
+negative binomial is significantly better
+```{r}
+test_likelihoodratio(model2, nb_model) %>%
+  kable()
+```
+
+## What is zero inflation? Is there zero-inflation in your chosen model?
+zero inflation -> too many zeros can bias results. Yes, there is zero-inflation in the model. Observed zeros < predicted
+```{r}
+performance::check_zeroinflation(nb_model)
+```
+```{r}
+library(pscl)
+zif_model <- zeroinfl(wwwhr ~ wordsum + age + sex + reliten + polviews + wrkhome | 1, 
+                       data = data_pos_clean, dist = "negbin")
+
+summary(zif_model)
+```
+
+::: panel-tabset
+## Log Lambda
+
+```{r}
+log_lambda <- predict(model2, type = "link")  # Get predicted log(lambda)
+log_lambda_df <- data.frame(Log_Lambda = log_lambda)
+
+head(log_lambda_df)
+
+```
+
+## Mean Count
+
+```{r}
+mean_count <- predict(model2, type = "response")  # Get predicted mean counts
+mean_count_df <- data.frame(Mean_Count = mean_count)
+head(mean_count_df)
+```
+:::
+
+## Report your conclusions
+The negative binomial regression model is the best fit for this data set since it handles overdispersion better than the Poisson one. The model essentially shows us that people with higher vocab scores and those who work from home more often are associated with spending more time on the Internet. Older folks with stronger religiosity spend less time on the Internet. Both sex and political orientation show no significant effect. However, the negative binomial model still has zero inflation issue, so the zero-inflated negative binomial model may be the best one.

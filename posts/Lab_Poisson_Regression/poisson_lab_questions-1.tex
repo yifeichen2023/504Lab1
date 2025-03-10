@@ -1,0 +1,778 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{2}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{longtable}
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{anyfontsize}
+\usepackage{multirow}
+\KOMAoption{captions}{tableheading}
+\usepackage{marginnote, here, relsize, needspace, setspace} \def\it{\emph}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Lab 5 - Poisson - Questions},
+  pdfauthor={Yifei Chen},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Lab 5 - Poisson - Questions}
+\author{Yifei Chen}
+\date{2025-03-10}
+
+\begin{document}
+\maketitle
+
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  To complete this lab:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Load packages
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(MASS)}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(emmeans)}
+\FunctionTok{library}\NormalTok{(ggeffects)}
+\FunctionTok{library}\NormalTok{(easystats)}
+\FunctionTok{library}\NormalTok{(performance)}
+\FunctionTok{library}\NormalTok{(knitr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Download the dataset:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{read\_delim}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/jgeller112/psy504{-}advanced{-}stats/main/slides/Poisson/data/2010.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Conduct the analysis described in the preregistration document
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  The number of hours per week that a person spends on the Internet
+  (``WWWHR'') will\\
+  be predicted by their vocabulary (``WORDSUM''), age (``AGE''), sex
+  (``SEX''), religiosity\\
+  (``RELITEN''), political orientation (``POLVIEWS''), and how often
+  they work from home\\
+  (``WRKHOME'').
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Let's use the \texttt{naniar} package's function
+  \texttt{replace\_with\_na}to clean the data.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(naniar)}
+
+\NormalTok{data\_pos }\OtherTok{\textless{}{-}}\NormalTok{ data }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(wwwhr, wordsum, age, sex, reliten, polviews, wrkhome) }\SpecialCharTok{\%\textgreater{}\%}
+\FunctionTok{replace\_with\_na}\NormalTok{(.,}
+             \AttributeTok{replace =} \FunctionTok{list}\NormalTok{(}\AttributeTok{wwwhr =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\DecValTok{998}\NormalTok{, }\DecValTok{999}\NormalTok{),}
+                          \AttributeTok{wordsum =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\DecValTok{99}\NormalTok{),}
+                          \AttributeTok{reliten =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{9}\NormalTok{), }
+             \AttributeTok{polviews =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{9}\NormalTok{), }
+             \AttributeTok{wrkhome =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{), }
+             \AttributeTok{age=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{98}\NormalTok{, }\DecValTok{99}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+Q: Can you explain what might be going on in the above code?
+
+A: It is replacing certain values within the specified column with NA to
+indicate missing/invalid data. It also first filter out columns that we
+don't need for further analysis.
+
+Q: The next step in data cleaning would be to ensure that the data in
+your code are aligned with the description/ usage context of the
+variables
+
+\begin{itemize}
+\tightlist
+\item
+  Recode sex and reliten as necessary
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data\_pos }\OtherTok{\textless{}{-}}\NormalTok{ data\_pos }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{sex =} \FunctionTok{factor}\NormalTok{(sex, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)),}
+         \AttributeTok{reliten =} \FunctionTok{factor}\NormalTok{(reliten, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Missingness}\label{missingness}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(skimr)}
+\NormalTok{skimr}\SpecialCharTok{::}\FunctionTok{skim}\NormalTok{(data\_pos)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Data summary}\tabularnewline
+\toprule\noalign{}
+\endfirsthead
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Name & data\_pos \\
+Number of rows & 2044 \\
+Number of columns & 7 \\
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ & \\
+Column type frequency: & \\
+factor & 2 \\
+numeric & 5 \\
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ & \\
+Group variables & None \\
+\end{longtable}
+
+\textbf{Variable type: factor}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1628}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1163}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1628}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0930}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1047}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.3605}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+skim\_variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+n\_missing
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+complete\_rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+ordered
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+n\_unique
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+top\_counts
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+sex & 0 & 1.00 & FALSE & 2 & -1: 1153, 1: 891 \\
+reliten & 99 & 0.95 & FALSE & 4 & 2: 747, 1: 707, 4: 363, 3: 128 \\
+\end{longtable}
+
+\textbf{Variable type: numeric}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1842}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1316}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1842}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0789}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0789}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0395}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0526}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0526}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0526}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0658}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0789}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+skim\_variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+n\_missing
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+complete\_rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+mean
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+sd
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p0
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p25
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p50
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p75
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p100
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+hist
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+wwwhr & 996 & 0.51 & 9.79 & 13.41 & 0 & 2 & 5 & 14 & 168 & ▇▁▁▁▁ \\
+wordsum & 657 & 0.68 & 6.03 & 2.07 & 0 & 5 & 6 & 7 & 10 & ▁▃▇▅▂ \\
+age & 3 & 1.00 & 47.97 & 17.68 & 18 & 33 & 47 & 61 & 89 & ▇▇▇▅▃ \\
+polviews & 71 & 0.97 & 4.08 & 1.46 & 1 & 3 & 4 & 5 & 7 & ▃▂▇▃▅ \\
+wrkhome & 882 & 0.57 & 2.26 & 1.72 & 1 & 1 & 1 & 4 & 6 & ▇▁▁▂▁ \\
+\end{longtable}
+
+\subsection{Fit a Poisson model to the
+data.}\label{fit-a-poisson-model-to-the-data.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(wwwhr }\SpecialCharTok{\textasciitilde{}}\NormalTok{ wordsum }\SpecialCharTok{+}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sex }\SpecialCharTok{+}\NormalTok{ reliten }\SpecialCharTok{+}\NormalTok{ polviews }\SpecialCharTok{+}\NormalTok{ wrkhome, }
+                     \AttributeTok{data =}\NormalTok{ data\_pos, }\AttributeTok{family =} \FunctionTok{poisson}\NormalTok{(}\AttributeTok{link =} \StringTok{"log"}\NormalTok{))}
+
+\FunctionTok{summary}\NormalTok{(model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+glm(formula = wwwhr ~ wordsum + age + sex + reliten + polviews + 
+    wrkhome, family = poisson(link = "log"), data = data_pos)
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  1.754427   0.080100  21.903  < 2e-16 ***
+wordsum      0.101883   0.007805  13.053  < 2e-16 ***
+age         -0.016611   0.001087 -15.280  < 2e-16 ***
+sex1         0.250233   0.026567   9.419  < 2e-16 ***
+reliten2     0.343367   0.037223   9.225  < 2e-16 ***
+reliten3     0.409478   0.063447   6.454 1.09e-10 ***
+reliten4     0.659817   0.039307  16.786  < 2e-16 ***
+polviews    -0.032646   0.009768  -3.342 0.000831 ***
+wrkhome      0.078655   0.007661  10.267  < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 7666.1  on 602  degrees of freedom
+Residual deviance: 6463.6  on 594  degrees of freedom
+  (1441 observations deleted due to missingness)
+AIC: 8525.9
+
+Number of Fisher Scoring iterations: 5
+\end{verbatim}
+
+\subsection{Carry out model checking}\label{carry-out-model-checking}
+
+Hint: performance package has the function you're looking for
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{performance}\SpecialCharTok{::}\FunctionTok{check\_overdispersion}\NormalTok{(model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# Overdispersion test
+
+       dispersion ratio =   14.654
+  Pearson's Chi-Squared = 8704.487
+                p-value =  < 0.001
+\end{verbatim}
+
+\subsection{Find any outliers}\label{find-any-outliers}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{outliers }\OtherTok{\textless{}{-}}\NormalTok{ performance}\SpecialCharTok{::}\FunctionTok{check\_outliers}\NormalTok{(model)}
+\NormalTok{data\_pos\_clean }\OtherTok{\textless{}{-}}\NormalTok{ data\_pos[}\SpecialCharTok{{-}}\NormalTok{outliers, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Refit the model after excludint
+outliers}\label{refit-the-model-after-excludint-outliers}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model2 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(wwwhr }\SpecialCharTok{\textasciitilde{}}\NormalTok{ wordsum }\SpecialCharTok{+}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sex }\SpecialCharTok{+}\NormalTok{ reliten }\SpecialCharTok{+}\NormalTok{ polviews }\SpecialCharTok{+}\NormalTok{ wrkhome, }
+                           \AttributeTok{data =}\NormalTok{ data\_pos\_clean, }\AttributeTok{family =} \FunctionTok{poisson}\NormalTok{(}\AttributeTok{link =} \StringTok{"log"}\NormalTok{))}
+
+\FunctionTok{summary}\NormalTok{(model2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+glm(formula = wwwhr ~ wordsum + age + sex + reliten + polviews + 
+    wrkhome, family = poisson(link = "log"), data = data_pos_clean)
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  1.767293   0.080239  22.025  < 2e-16 ***
+wordsum      0.101780   0.007801  13.047  < 2e-16 ***
+age         -0.016693   0.001087 -15.353  < 2e-16 ***
+sex1         0.252977   0.026584   9.516  < 2e-16 ***
+reliten2     0.336660   0.037290   9.028  < 2e-16 ***
+reliten3     0.403315   0.063473   6.354  2.1e-10 ***
+reliten4     0.652067   0.039412  16.545  < 2e-16 ***
+polviews    -0.033709   0.009774  -3.449 0.000563 ***
+wrkhome      0.078938   0.007657  10.309  < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 7659.5  on 601  degrees of freedom
+Residual deviance: 6457.6  on 593  degrees of freedom
+  (1441 observations deleted due to missingness)
+AIC: 8516.9
+
+Number of Fisher Scoring iterations: 5
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{model\_parameters}\NormalTok{(model2) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{print\_html}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}
+\fontsize{12.0pt}{14.4pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lccccc}
+\toprule
+Parameter & Coefficient & SE & 95\% CI & z & p \\ 
+\midrule\addlinespace[2.5pt]
+{(Intercept)} & 1.77 & 0.08 & (1.61, 1.92) & 22.03 & < .001 \\ 
+{wordsum} & 0.10 & 7.80e-03 & (0.09, 0.12) & 13.05 & < .001 \\ 
+{age} & -0.02 & 1.09e-03 & (-0.02, -0.01) & -15.35 & < .001 \\ 
+{sex (1)} & 0.25 & 0.03 & (0.20, 0.31) & 9.52 & < .001 \\ 
+{reliten (2)} & 0.34 & 0.04 & (0.26, 0.41) & 9.03 & < .001 \\ 
+{reliten (3)} & 0.40 & 0.06 & (0.28, 0.53) & 6.35 & < .001 \\ 
+{reliten (4)} & 0.65 & 0.04 & (0.58, 0.73) & 16.55 & < .001 \\ 
+{polviews} & -0.03 & 9.77e-03 & (-0.05, -0.01) & -3.45 & < .001 \\ 
+{wrkhome} & 0.08 & 7.66e-03 & (0.06, 0.09) & 10.31 & < .001 \\ 
+\bottomrule
+\end{tabular*}
+\begin{minipage}{\linewidth}
+\\
+\end{minipage}
+\end{table}
+
+\subsubsection{Check for Overdispersion}\label{check-for-overdispersion}
+
+Hint: performance package has the function you're looking for
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{performance}\SpecialCharTok{::}\FunctionTok{check\_overdispersion}\NormalTok{(model2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# Overdispersion test
+
+       dispersion ratio =   14.654
+  Pearson's Chi-Squared = 8689.701
+                p-value =  < 0.001
+\end{verbatim}
+
+What do you notice? And what's a good next step forward? Can there be
+another model class that can fit the data? If so, fit this model to the
+data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# it is still not a good fit after excluding the outliers, next step {-}\textgreater{} negative binomial}
+\NormalTok{nb\_model }\OtherTok{\textless{}{-}} \FunctionTok{glm.nb}\NormalTok{(wwwhr }\SpecialCharTok{\textasciitilde{}}\NormalTok{ wordsum }\SpecialCharTok{+}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sex }\SpecialCharTok{+}\NormalTok{ reliten }\SpecialCharTok{+}\NormalTok{ polviews }\SpecialCharTok{+}\NormalTok{ wrkhome, }
+                   \AttributeTok{data =}\NormalTok{ data\_pos\_clean)}
+
+\FunctionTok{summary}\NormalTok{(nb\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+glm.nb(formula = wwwhr ~ wordsum + age + sex + reliten + polviews + 
+    wrkhome, data = data_pos_clean, init.theta = 0.9663571073, 
+    link = log)
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  1.824523   0.258989   7.045 1.86e-12 ***
+wordsum      0.107128   0.025981   4.123 3.73e-05 ***
+age         -0.016239   0.003528  -4.603 4.16e-06 ***
+sex1         0.163860   0.089710   1.827  0.06777 .  
+reliten2     0.310860   0.109539   2.838  0.00454 ** 
+reliten3     0.360300   0.207253   1.738  0.08213 .  
+reliten4     0.638718   0.128299   4.978 6.41e-07 ***
+polviews    -0.033156   0.033246  -0.997  0.31863    
+wrkhome      0.056940   0.026989   2.110  0.03488 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for Negative Binomial(0.9664) family taken to be 1)
+
+    Null deviance: 770.55  on 601  degrees of freedom
+Residual deviance: 670.42  on 593  degrees of freedom
+  (1441 observations deleted due to missingness)
+AIC: 3938.6
+
+Number of Fisher Scoring iterations: 1
+
+              Theta:  0.9664 
+          Std. Err.:  0.0597 
+
+ 2 x log-likelihood:  -3918.5570 
+\end{verbatim}
+
+\subsection{Which one is better- your earlier model, or later
+model?}\label{which-one-is-better--your-earlier-model-or-later-model}
+
+negative binomial is significantly better
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{test\_likelihoodratio}\NormalTok{(model2, nb\_model) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lllrrrr@{}}
+\toprule\noalign{}
+& Name & Model & df & df\_diff & Chi2 & p \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+model2 & model2 & glm & 9 & NA & NA & NA \\
+nb\_model & nb\_model & negbin & 10 & 1 & 4580.367 & 0 \\
+\end{longtable}
+
+\subsection{What is zero inflation? Is there zero-inflation in your
+chosen
+model?}\label{what-is-zero-inflation-is-there-zero-inflation-in-your-chosen-model}
+
+zero inflation -\textgreater{} too many zeros can bias results. Yes,
+there is zero-inflation in the model. Observed zeros \textless{}
+predicted
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{performance}\SpecialCharTok{::}\FunctionTok{check\_zeroinflation}\NormalTok{(nb\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# Check for zero-inflation
+
+   Observed zeros: 40
+  Predicted zeros: 67
+            Ratio: 1.68
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(pscl)}
+\NormalTok{zif\_model }\OtherTok{\textless{}{-}} \FunctionTok{zeroinfl}\NormalTok{(wwwhr }\SpecialCharTok{\textasciitilde{}}\NormalTok{ wordsum }\SpecialCharTok{+}\NormalTok{ age }\SpecialCharTok{+}\NormalTok{ sex }\SpecialCharTok{+}\NormalTok{ reliten }\SpecialCharTok{+}\NormalTok{ polviews }\SpecialCharTok{+}\NormalTok{ wrkhome }\SpecialCharTok{|} \DecValTok{1}\NormalTok{, }
+                       \AttributeTok{data =}\NormalTok{ data\_pos\_clean, }\AttributeTok{dist =} \StringTok{"negbin"}\NormalTok{)}
+
+\FunctionTok{summary}\NormalTok{(zif\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+zeroinfl(formula = wwwhr ~ wordsum + age + sex + reliten + polviews + 
+    wrkhome | 1, data = data_pos_clean, dist = "negbin")
+
+Pearson residuals:
+    Min      1Q  Median      3Q     Max 
+-0.9568 -0.7130 -0.3937  0.2668  7.6559 
+
+Count model coefficients (negbin with log link):
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  1.824512   0.263285   6.930 4.21e-12 ***
+wordsum      0.107133   0.027367   3.915 9.05e-05 ***
+age         -0.016239   0.003633  -4.470 7.84e-06 ***
+sex1         0.163843   0.090917   1.802  0.07153 .  
+reliten2     0.310846   0.109528   2.838  0.00454 ** 
+reliten3     0.360270   0.207851   1.733  0.08304 .  
+reliten4     0.638695   0.127404   5.013 5.35e-07 ***
+polviews    -0.033156   0.032774  -1.012  0.31170    
+wrkhome      0.056942   0.027562   2.066  0.03883 *  
+Log(theta)  -0.034211   0.061746  -0.554  0.57954    
+
+Zero-inflation model coefficients (binomial with logit link):
+            Estimate Std. Error z value Pr(>|z|)
+(Intercept)    -12.2       26.9  -0.454     0.65
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Theta = 0.9664 
+Number of iterations in BFGS optimization: 24 
+Log-likelihood: -1959 on 11 Df
+\end{verbatim}
+
+\subsection{Log Lambda}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{log\_lambda }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(model2, }\AttributeTok{type =} \StringTok{"link"}\NormalTok{)  }\CommentTok{\# Get predicted log(lambda)}
+\NormalTok{log\_lambda\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Log\_Lambda =}\NormalTok{ log\_lambda)}
+
+\FunctionTok{head}\NormalTok{(log\_lambda\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+   Log_Lambda
+1    3.199785
+10   2.208683
+19   2.361181
+20   2.060068
+24   2.739818
+27   3.064426
+\end{verbatim}
+
+\subsection{Mean Count}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mean\_count }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(model2, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)  }\CommentTok{\# Get predicted mean counts}
+\NormalTok{mean\_count\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Mean\_Count =}\NormalTok{ mean\_count)}
+\FunctionTok{head}\NormalTok{(mean\_count\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+   Mean_Count
+1   24.527263
+10   9.103718
+19  10.603469
+20   7.846504
+24  15.484166
+27  21.422162
+\end{verbatim}
+
+\subsection{Report your conclusions}\label{report-your-conclusions}
+
+The negative binomial regression model is the best fit for this data set
+since it handles overdispersion better than the Poisson one. The model
+essentially shows us that people with higher vocab scores and those who
+work from home more often are associated with spending more time on the
+Internet. Older folks with stronger religiosity spend less time on the
+Internet. Both sex and political orientation show no significant effect.
+However, the negative binomial model still has zero inflation issue, so
+the zero-inflated negative binomial model may be the best one.
+
+
+
+
+\end{document}
