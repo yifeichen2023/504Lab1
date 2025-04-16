@@ -103,6 +103,12 @@ If you'd like to use multiple cores, but you're not sure how many you have, exec
 
 #### Question 1: How many cores do you have?
 
+10
+
+```{r}
+parallel::detectCores()
+```
+
 Check the model summary.
 
 ```{r}
@@ -254,6 +260,8 @@ ggs(fit13.b) %>%
 
 #### Question 2: Can you use the results here to describe the need for discarding warmup draws?
 
+It is needed because at the very beginning, the algorithm is still very unstable and exploring a wide variety of options. It is not converging until later on (when the lines overlap with each other a lot more).
+
 Another issue is *autocorrelation*, the degree to which a given HMC draw is correlated with the previous draw(s). We can make a plot of the autocorrelations with the `mcmc_acf()` function from the **bayesplot** package.
 
 ```{r}
@@ -269,6 +277,8 @@ Mixing describes how efficiently MCMC chains explore the posterior distribution.
 :::
 
 #### Question 3: Why are L-shaped autocorrelation plots are desirable? What would an undesirable autocorrelation plot look like?
+
+Having the autocorrelation going down/near zero is good because it means that each consecutive draw is independent of each other, meaning that for each draw, we are able to get almost entirely new info -\> making it more effective.
 
 Those low autocorrelations also have a lot to do with our effective sample size (ESS) estimates. Take another look at the `summary()` output.
 
