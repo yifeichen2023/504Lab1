@@ -3,8 +3,10 @@
     "listing": "/index.html",
     "items": [
       "/posts/Lab_Bayes/Bayes_Lab_1.html",
+      "/posts/Lab_Bayes3_2/Bayes_Lab_3_2_HMC Diagnostics.html",
       "/posts/Lab_Bayes2/Bayes_Lab_2.html",
       "/posts/Lab_Logistic_Regression/Lab: Logistic Regression.html",
+      "/posts/Lab_Bayes3_1/Bayes_Lab_3_1_Priors and predictive checks.html",
       "/posts/Multilevel Modeling Walkthrough/MLM_Intro_Questions.html",
       "/posts/Lab_Ordinal_Regression/ord_lab_q.html",
       "/posts/Lab_Poisson_Regression/poisson_lab_questions-1.html",
