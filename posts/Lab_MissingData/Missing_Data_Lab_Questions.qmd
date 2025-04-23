@@ -1,0 +1,173 @@
+---
+title: "Missing_Data_Lab"
+format: html
+editor: visual
+---
+
+Missing data is a common problem and dealing with it appropriately is extremely important. Ignoring the missing data points or filling them incorrectly may cause the models to work in unexpected ways and cause the predictions and inferences to be biased.
+
+Le'ts consider built-in dataset 'airquality' in R as a sample dataset.
+
+```{r}
+# Load the airquality dataset
+library(skimr)
+
+data("airquality")
+skim(airquality)
+```
+
+```{r}
+library(naniar)
+
+vis_miss(airquality)
+```
+
+```{r}
+library(naniar)
+
+mcar_test(airquality)
+```
+
+#### Question 1:
+
+(a) Examine this dataset for missing values. While there are many ways to do this, the skim function from the library 'skimr' is elegant;
+
+    (a) 17 missing from Ozone and 7 missing from Solar.R
+
+(b) use the nanair package to visualize missing values
+
+    (a) DONE
+
+(c) even though it's hard to confirm based on visualizations alone, what do your visualizations lead you to believe about the missing data being MCAR, MAR, or MNAR?
+
+    (a) Ozone may be missing MCAR since it is really spread out, not so sure about Solar.R.
+
+(d) Carry out Little's statistical test to evaluate MCAR and report results.
+
+    (a) result suggests it is not MCAR
+
+(e) Creating a binary indicator for missingness allows you to test whether the presence of missing data is related to observed data.
+
+    -   For instance, you can create a dummy variable: 1 = Missing; 0 = Observed.
+    -   Next you can conduct a chi-square test or t-test:
+        -   Chi-square: Compare proportions of missingness ***across groups***.
+        -   T-test: Compare means of (other) observed variables with missingness indicators.
+    -   it looks like the values are more likely to be missing in certain period of time but not certain temperature.
+
+```{r}
+# Create a binary indicator for Ozone missingness
+airquality$Ozone_miss <- ifelse(is.na(airquality$Ozone), 1, 0)
+
+# Create a binary indicator for Solar.R missingness
+airquality$Solar_miss <- ifelse(is.na(airquality$Solar.R), 1, 0)
+
+# T-test to compare mean temperature between records with and without missing Ozone
+t_test_result <- t.test(Temp ~ Ozone_miss, data = airquality)
+print(t_test_result)
+t_test_result <- t.test(Temp ~ Solar_miss, data = airquality)
+print(t_test_result)
+
+# Chi-square test to check if Ozone missingness is related to Month
+table_month_miss <- table(airquality$Month, airquality$Ozone_miss)
+chi_test_result <- chisq.test(table_month_miss)
+print(chi_test_result)
+
+table_month_miss <- table(airquality$Month, airquality$Solar_miss)
+chi_test_result <- chisq.test(table_month_miss)
+print(chi_test_result)
+```
+
+#### Question 2:
+
+Create **new and appropriately named datasets** that are based on airquality for each of the following ways of fixing the dataset:
+
+```         
+  - (a) "listwise deletion" or "complete case analysis" --- where entire records from the analysis are removed if they are missing any data point in one or more variables 
+  
+  - (b) Imputation with mean --- involves filling in the missing values with the mean of the available values in the same variable.
+  
+  - (c) Imputation with regression (use mice package)
+  
+  - (d) Imputation with stochastic regression (use mice package)
+
+  - (e) Imputation with multiple induction (use mice package, 5 imputations, and Predictive mean matching method)
+```
+
+```{r}
+# (a) Listwise deletion
+airquality_listwise <- na.omit(airquality)
+
+# (b) Mean imputation
+airquality_mean <- airquality
+airquality_mean$Ozone[is.na(airquality_mean$Ozone)] <- mean(airquality$Ozone, na.rm = TRUE)
+airquality_mean$Solar.R[is.na(airquality_mean$Solar.R)] <- mean(airquality$Solar.R, na.rm = TRUE)
+
+# Load mice package
+library(mice)
+
+# (c) Regression imputation
+# Need to properly use complete() to get the imputed dataset
+imp_reg <- mice(airquality, method = "norm.predict", m = 1, maxit = 5, printFlag = FALSE)
+airquality_regression <- complete(imp_reg)
+
+# (d) Stochastic regression imputation
+# Need to properly use complete() to get the imputed dataset
+imp_stoch <- mice(airquality, method = "norm.nob", m = 1, maxit = 5, printFlag = FALSE)
+airquality_stoch_regression <- complete(imp_stoch)
+
+# (e) Multiple imputation with PMM
+# For multiple imputation, we need to specify the method for all variables
+imp_multi <- mice(airquality, method = "pmm", m = 5, maxit = 5, printFlag = FALSE)
+# For comparison purposes, we'll extract the first imputed dataset
+airquality_multiple <- complete(imp_multi, 1)
+```
+
+#### Question 3:
+
+Compare the eventual distribution from these datasets on the variable 'Ozone'against the orgiinal. Below is a template that considers only 2 datasets but please consider all the datasets you generated within a single plot
+
+```{r}
+# ggplot(airquality, aes(x=Ozone, fill="Original")) +
+#   geom_density(alpha=0.5) +
+#   geom_density(data=dataset_listwise_deletion, aes(x=Ozone, fill="Listwise Deletion"), alpha=0.5) +
+#   labs(title="Density Plot of Ozone: Original vs. Imputed")
+
+# Load ggplot2
+library(ggplot2)
+library(reshape2)
+
+# Create a dataset for plotting
+# First, we need to gather all datasets
+airquality_original <- airquality
+airquality_original$dataset <- "Original"
+
+airquality_listwise$dataset <- "Listwise Deletion"
+airquality_mean$dataset <- "Mean Imputation"
+airquality_regression$dataset <- "Regression Imputation"
+airquality_stoch_regression$dataset <- "Stochastic Regression"
+airquality_multiple$dataset <- "Multiple Imputation"
+
+# Combine all datasets
+all_datasets <- rbind(
+  airquality_original[, c("Ozone", "dataset")],
+  airquality_listwise[, c("Ozone", "dataset")],
+  airquality_mean[, c("Ozone", "dataset")],
+  airquality_regression[, c("Ozone", "dataset")],
+  airquality_stoch_regression[, c("Ozone", "dataset")],
+  airquality_multiple[, c("Ozone", "dataset")]
+)
+
+# Create the density plot
+ggplot(all_datasets, aes(x = Ozone, fill = dataset)) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Density Plot of Ozone: Original vs. Imputed Methods",
+       x = "Ozone", y = "Density") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set1")
+```
+
+What do you observe?
+
+All every other distributions look very similar to the original dataset except for the mean imputation.
+
+#### Of course, each dataset you produced will lead to different modeling results, but we won't go into that in today's lab.
